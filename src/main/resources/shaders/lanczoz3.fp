@@ -19,11 +19,13 @@ varying  vec2          mgl_texCoord;
 // radius 3 is 36/16 = 2.25x more computationally expensive so be careful!
 int SAMPLING_RADIUS = 3;
 int MIN_SAMPLES=2 * SAMPLING_RADIUS;
+// cant go higher than this because you start getting banding. May need to tweak algorithm, too many vectors adding
+// together may be maxing out the 8 bit color or maybe we need double4 instead of vec4
 int MAX_SAMPLES=16 * MIN_SAMPLES;
 int CONVERT_TO_DIAMETER=2;
 
 // how much do we want to abuse bilinear sampling in the gpu itself? Should be between 1.0 and 2.0
-float SAMPLE_CHEAT_RATIO=1.5;
+float SAMPLE_CHEAT_RATIO=2.0;
 
 
 	 float sincModified(float value)
@@ -95,8 +97,9 @@ vec4 Lanczoz( sampler2D textureSampler, vec2 TexCoord, float fWidth, float fHeig
 	float jumpY = (top - bottom) / float(numExtraSamplesY);
 
 	//TODO make this use MAX_SAMPLES somehow
-	float yJumps[32];
-	float yWeights[32];
+	// 16 * 6
+	float yJumps[96];
+	float yWeights[96];
 	for( int n = 0 ; n < numExtraSamplesY; n += 1)
 	{
 		// Uniform distribution (see wikipedia supersampling)

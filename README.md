@@ -12,6 +12,8 @@ Requirements:
 LD_LIBRARY_PATH=/opt/libjpeg-turbo/lib64
 export LD_LIBRARY_PATH
 ```
+* Clone https://github.com/eHarmony/eh-libjpeg-turbo and mvn install on it
+* mvn package
 
 Run with `java -cp climp-0.0.1-SNAPSHOT-shaded.jar com.eharmony.climp.OpenclResizer`
 
